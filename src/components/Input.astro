@@ -1,0 +1,77 @@
+---
+import type { HTMLTag } from "astro/types"
+
+type HTMLInputTypeAttribute =
+	| "button"
+	| "checkbox"
+	| "color"
+	| "date"
+	| "datetime-local"
+	| "email"
+	| "file"
+	| "hidden"
+	| "image"
+	| "month"
+	| "number"
+	| "password"
+	| "radio"
+	| "range"
+	| "reset"
+	| "search"
+	| "submit"
+	| "tel"
+	| "text"
+	| "time"
+	| "url"
+	| "week"
+
+interface Props {
+	as?: HTMLTag
+	label: string
+	id: string
+	placeholder: string
+	type?: HTMLInputTypeAttribute
+	required?: boolean
+	class?: string
+}
+
+const {
+	as: Tag = "input",
+	label,
+	id,
+	placeholder,
+	type = "text",
+	required = true,
+	class: className,
+} = Astro.props
+---
+
+<div class:list={[className, "space-y-1.5"]}>
+	<label class="text-sm font-medium leading-none text-zinc-900" for={id}>
+		{label}
+	</label>
+
+	<Tag
+		id={id}
+		placeholder={Tag === "select" ? undefined : placeholder}
+		type={Tag === "select" ? undefined : type}
+		required={required}
+		class:list={[
+			{
+				"invalid:text-zinc-600": Tag === "select",
+			},
+			"flex h-10 w-full rounded-md border border-zinc-900/40 bg-transparent px-3 py-2 text-sm text-zinc-900 ring-offset-white placeholder:text-zinc-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-400 focus-visible:ring-offset-2",
+		]}
+	>
+		{
+			Tag === "select" && (
+				<Fragment>
+					<option value="" disabled selected>
+						{placeholder}
+					</option>
+					<slot />
+				</Fragment>
+			)
+		}
+	</Tag>
+</div>

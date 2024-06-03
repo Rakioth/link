@@ -1,0 +1,30 @@
+---
+import Input from "@/components/Input.astro"
+import Layout from "@/layouts/Layout.astro"
+import Main from "@/sections/Main.astro"
+---
+
+<Layout href="/manage" label="Manage.">
+	<Main title="Create Short URLs" button="Shorten!">
+		<Input
+			id="link"
+			label="Destination URL"
+			placeholder="Type or paste a link (URL)"
+			type="url"
+			class="col-span-2"
+		/>
+		<Input
+			id="slug"
+			label="Signature Slug"
+			placeholder="Slashtag"
+			class="col-span-2 sm:col-span-1"
+		/>
+		<Input
+			id="auth"
+			label="Auth Code"
+			placeholder="Enter your authorization code"
+			type="password"
+			class="col-span-2 sm:col-span-1"
+		/>
+	</Main>
+</Layout>
