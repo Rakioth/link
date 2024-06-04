@@ -15,6 +15,8 @@ const { label, success, error = "Something went BAD!" } = Astro.props
 	type="submit"
 	class="group inline-flex h-10 items-center justify-center whitespace-nowrap rounded-md bg-zinc-900 px-4 py-2 text-sm font-medium text-neutral-50 ring-offset-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-400 focus-visible:ring-offset-2 enabled:after:content-[attr(data-label)] disabled:pointer-events-none disabled:opacity-50 enabled:data-[state=false]:bg-red-900 enabled:data-[state=true]:bg-green-900 enabled:data-[state=false]:after:content-[attr(data-error)] enabled:data-[state=true]:after:content-[attr(data-success)] any-hover:enabled:bg-zinc-900/90 any-hover:enabled:data-[state=false]:bg-red-900/90 any-hover:enabled:data-[state=true]:bg-green-900/90 motion-safe:transition-colors"
 >
+	<span class="sr-only">{label}</span>
+
 	<div role="status" class="hidden group-disabled:block">
 		<svg
 			class="me-3 inline h-4 w-4 animate-spin text-current"
