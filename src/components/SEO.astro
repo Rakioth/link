@@ -12,9 +12,11 @@ const {
 	description = "A personal URL shortener using Cloudflare Workers with authentication.",
 	image = "/og.jpg",
 } = Astro.props
+
+const fullTitle = `URL Shortener | ${title}`
 ---
 
-<title>URL Shortener | {title}</title>
+<title>{fullTitle}</title>
 
 <meta charset="UTF-8" />
 <meta name="description" content={description} />
@@ -29,7 +31,7 @@ const {
 
 <meta property="og:image" content={new URL(image, Astro.url)} />
 <meta property="og:image:alt" content="Background from the website link.raks.dev" />
-<meta property="og:title" content={title} />
+<meta property="og:title" content={fullTitle} />
 <meta property="og:description" content={description} />
 <meta property="og:url" content={Astro.url} />
 <meta property="og:site_name" content="URL Shortener" />
@@ -38,7 +40,7 @@ const {
 
 <meta property="twitter:image" content={new URL(image, Astro.url)} />
 <meta property="twitter:card" content="summary_large_image" />
-<meta property="twitter:title" content={title} />
+<meta property="twitter:title" content={fullTitle} />
 <meta property="twitter:description" content={description} />
 <meta property="twitter:url" content={Astro.url} />
 <meta property="twitter:domain" content={Astro.url.hostname} />

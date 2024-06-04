@@ -31,16 +31,16 @@ import Form from "@/sections/Form.astro"
 
 <script>
 	document.addEventListener("astro:page-load", () => {
-		const form = document.querySelector("form#create") as HTMLFormElement
-		const button = form.querySelector("button") as HTMLButtonElement
+		const form: HTMLFormElement | null = document.querySelector("form#create")
+		const button = document.querySelector("form button") as HTMLButtonElement
 
 		function handleSubmit(event: SubmitEvent) {
 			event.preventDefault()
 			button.disabled = true
 
-			const link = form.link.value
-			const slug = form.slug.value
-			const auth = form.auth.value
+			const link = form?.link.value
+			const slug = form?.slug.value
+			const auth = form?.auth.value
 
 			const requestHandler = (method: string) =>
 				fetch(`/api/${slug}`, {
@@ -68,10 +68,14 @@ import Form from "@/sections/Form.astro"
 				.finally(() => (button.disabled = false))
 		}
 
-		document.addEventListener("astro:before-swap", () => {
-			form.removeEventListener("submit", handleSubmit)
-		})
+		document.addEventListener(
+			"astro:before-swap",
+			() => {
+				form?.removeEventListener("submit", handleSubmit)
+			},
+			{ once: true }
+		)
 
-		form.addEventListener("submit", handleSubmit)
+		form?.addEventListener("submit", handleSubmit)
 	})
 </script>

@@ -2,16 +2,6 @@
 import Input from "@/components/Input.astro"
 import Layout from "@/layouts/Layout.astro"
 import Form from "@/sections/Form.astro"
-
-const endpoint = new URL("/api", Astro.url)
-const slugs: string[] = await fetch(endpoint)
-	.then((res) => {
-		if (res.status !== 200) {
-			throw new Error("Failed to fetch slugs")
-		}
-		return res.json()
-	})
-	.catch(() => [])
 ---
 
 <Layout title="MANAGE">
@@ -22,9 +12,7 @@ const slugs: string[] = await fetch(endpoint)
 			label="Signature Slug"
 			placeholder="Select your option"
 			class="col-span-2"
-		>
-			{slugs.map((slug) => <option value={slug}>{slug}</option>)}
-		</Input>
+		/>
 		<Input
 			id="auth"
 			label="Auth Code"
@@ -37,16 +25,35 @@ const slugs: string[] = await fetch(endpoint)
 
 <script>
 	document.addEventListener("astro:page-load", () => {
-		const form = document.querySelector("form#manage") as HTMLFormElement
-		const placeholder = form.querySelector("option[disabled]") as HTMLOptionElement
-		const button = form.querySelector("button") as HTMLButtonElement
+		const form: HTMLFormElement | null = document.querySelector("form#manage")
+		const button = document.querySelector("form button") as HTMLButtonElement
+		const select: HTMLSelectElement | null = document.querySelector("select")
+		const placeholder = document.querySelector("select option[disabled]") as HTMLOptionElement
+
+		async function handleSlugs() {
+			const slugs: string[] = await fetch("/api")
+				.then((res) => {
+					if (res.status !== 200) {
+						throw new Error("Failed to fetch slugs")
+					}
+					return res.json()
+				})
+				.catch(() => [])
+
+			slugs.forEach((slug) => {
+				const option = document.createElement("option")
+				option.value = slug
+				option.textContent = slug
+				select?.appendChild(option)
+			})
+		}
 
 		function handleSubmit(event: SubmitEvent) {
 			event.preventDefault()
 			button.disabled = true
 
-			const slug = form.slug.value
-			const auth = form.auth.value
+			const slug = form?.slug.value
+			const auth = form?.auth.value
 
 			fetch(`/api/${slug}`, {
 				method: "DELETE",
@@ -58,7 +65,7 @@ const slugs: string[] = await fetch(endpoint)
 					if (res.status !== 204) {
 						throw new Error("Failed to delete slug")
 					}
-					const option = form.querySelector(`option[value="${slug}"]`) as HTMLOptionElement
+					const option = select?.querySelector(`option[value="${slug}"]`) as HTMLOptionElement
 					option.remove()
 					placeholder.selected = true
 					button.dataset.state = "true"
@@ -67,10 +74,15 @@ const slugs: string[] = await fetch(endpoint)
 				.finally(() => (button.disabled = false))
 		}
 
-		document.addEventListener("astro:before-swap", () => {
-			form.removeEventListener("submit", handleSubmit)
-		})
+		document.addEventListener(
+			"astro:before-swap",
+			() => {
+				form?.removeEventListener("submit", handleSubmit)
+			},
+			{ once: true }
+		)
 
-		form.addEventListener("submit", handleSubmit)
+		handleSlugs()
+		form?.addEventListener("submit", handleSubmit)
 	})
 </script>
