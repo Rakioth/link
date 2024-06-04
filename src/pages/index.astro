@@ -1,11 +1,11 @@
 ---
 import Input from "@/components/Input.astro"
 import Layout from "@/layouts/Layout.astro"
-import Main from "@/sections/Main.astro"
+import Form from "@/sections/Form.astro"
 ---
 
 <Layout href="/manage" label="Manage.">
-	<Main title="Create Short URLs" button="Shorten!">
+	<Form title="Create Short URLs" button="Shorten!" id="create" success="Created shorten URL!">
 		<Input
 			id="link"
 			label="Destination URL"
@@ -26,5 +26,52 @@ import Main from "@/sections/Main.astro"
 			type="password"
 			class="col-span-2 sm:col-span-1"
 		/>
-	</Main>
+	</Form>
 </Layout>
+
+<script>
+	document.addEventListener("astro:page-load", () => {
+		const form = document.querySelector("form#create") as HTMLFormElement
+		const button = form.querySelector("button") as HTMLButtonElement
+
+		function handleSubmit(event: SubmitEvent) {
+			event.preventDefault()
+			button.disabled = true
+
+			const link = form.link.value
+			const slug = form.slug.value
+			const auth = form.auth.value
+
+			const requestHandler = (method: string) =>
+				fetch(`/api/${slug}`, {
+					method,
+					headers: {
+						"Authorization": auth,
+						"X-Destination": link,
+					},
+				})
+
+			requestHandler("POST")
+				.then((res) => {
+					if (res.status === 409) {
+						return requestHandler("PUT").then((putRes) => {
+							if (putRes.status !== 200) {
+								throw new Error("Failed to update slug")
+							}
+						})
+					} else if (res.status !== 201) {
+						throw new Error("Failed to create slug")
+					}
+				})
+				.then(() => (button.dataset.state = "true"))
+				.catch(() => (button.dataset.state = "false"))
+				.finally(() => (button.disabled = false))
+		}
+
+		document.addEventListener("astro:before-swap", () => {
+			form.removeEventListener("submit", handleSubmit)
+		})
+
+		form.addEventListener("submit", handleSubmit)
+	})
+</script>

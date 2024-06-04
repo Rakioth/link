@@ -3,6 +3,7 @@ dist/
 
 ### Generated Types ###
 .astro/
+.wrangler/
 
 ### Dependencies ###
 node_modules/
@@ -16,6 +17,7 @@ pnpm-debug.log*
 ### Environment Variables ###
 .env
 .env.production
+.dev.vars
 
 ### Mac OS ###
 .DS_Store
@@ -28,6 +30,3 @@ yarn.lock
 ### IDE Folders ###
 .vs/
 .idea
-
-### Generated Vercel Output ###
-.vercel/

@@ -1,17 +1,22 @@
 ---
 import SectionContainer from "@/components/SectionContainer.astro"
+import SubmitButton from "@/components/SubmitButton.astro"
 
 interface Props {
 	title: string
 	button: string
+	id: string
+	success: string
+	error?: string
 }
 
-const { title, button } = Astro.props
+const { title, button, id, success, error } = Astro.props
 ---
 
 <main class="my-auto flex items-center justify-center">
 	<SectionContainer
 		as="form"
+		id={id}
 		class="flex h-full flex-col gap-6 rounded-xl bg-white/50 p-6 shadow ring-1 ring-zinc-900/10 backdrop-blur"
 	>
 		<h1 class="text-2xl font-black leading-none tracking-tight text-zinc-900">
@@ -20,11 +25,6 @@ const { title, button } = Astro.props
 		<div class="grid grid-cols-2 gap-2">
 			<slot />
 		</div>
-		<button
-			type="submit"
-			class="inline-flex h-10 items-center justify-center whitespace-nowrap rounded-md bg-zinc-900 px-4 py-2 text-sm font-medium text-neutral-50 ring-offset-white hover:bg-zinc-900/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-400 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 motion-safe:transition-colors"
-		>
-			{button}
-		</button>
+		<SubmitButton label={button} success={success} error={error} />
 	</SectionContainer>
 </main>

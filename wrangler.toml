@@ -1,0 +1,8 @@
+name = "link"
+pages_build_output_dir = "./dist"
+compatibility_date = "2024-05-29"
+compatibility_flags = ["nodejs_compat"]
+
+[[kv_namespaces]]
+binding = "REDIRECTIONS"
+id = "2af524bc161c4ff7905eb63f526d5b2c"

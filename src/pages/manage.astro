@@ -1,11 +1,21 @@
 ---
 import Input from "@/components/Input.astro"
 import Layout from "@/layouts/Layout.astro"
-import Main from "@/sections/Main.astro"
+import Form from "@/sections/Form.astro"
+
+const endpoint = new URL("/api", Astro.url)
+const slugs: string[] = await fetch(endpoint)
+	.then((res) => {
+		if (res.status !== 200) {
+			throw new Error("Failed to fetch slugs")
+		}
+		return res.json()
+	})
+	.catch(() => [])
 ---
 
 <Layout title="MANAGE">
-	<Main title="Manage Short URLs" button="Unshorten!">
+	<Form title="Manage Short URLs" button="Unshorten!" id="manage" success="Deleted shorten URL!">
 		<Input
 			as="select"
 			id="slug"
@@ -13,7 +23,7 @@ import Main from "@/sections/Main.astro"
 			placeholder="Select your option"
 			class="col-span-2"
 		>
-			<option value="Option TODO">Option TODO</option>
+			{slugs.map((slug) => <option value={slug}>{slug}</option>)}
 		</Input>
 		<Input
 			id="auth"
@@ -22,5 +32,45 @@ import Main from "@/sections/Main.astro"
 			type="password"
 			class="col-span-2"
 		/>
-	</Main>
+	</Form>
 </Layout>
+
+<script>
+	document.addEventListener("astro:page-load", () => {
+		const form = document.querySelector("form#manage") as HTMLFormElement
+		const placeholder = form.querySelector("option[disabled]") as HTMLOptionElement
+		const button = form.querySelector("button") as HTMLButtonElement
+
+		function handleSubmit(event: SubmitEvent) {
+			event.preventDefault()
+			button.disabled = true
+
+			const slug = form.slug.value
+			const auth = form.auth.value
+
+			fetch(`/api/${slug}`, {
+				method: "DELETE",
+				headers: {
+					Authorization: auth,
+				},
+			})
+				.then((res) => {
+					if (res.status !== 204) {
+						throw new Error("Failed to delete slug")
+					}
+					const option = form.querySelector(`option[value="${slug}"]`) as HTMLOptionElement
+					option.remove()
+					placeholder.selected = true
+					button.dataset.state = "true"
+				})
+				.catch(() => (button.dataset.state = "false"))
+				.finally(() => (button.disabled = false))
+		}
+
+		document.addEventListener("astro:before-swap", () => {
+			form.removeEventListener("submit", handleSubmit)
+		})
+
+		form.addEventListener("submit", handleSubmit)
+	})
+</script>
