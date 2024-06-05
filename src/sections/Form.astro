@@ -8,12 +8,13 @@ interface Props {
 	id: string
 	success: string
 	error?: string
+	class?: string
 }
 
-const { title, button, id, success, error } = Astro.props
+const { title, button, id, success, error, class: className } = Astro.props
 ---
 
-<main class="my-auto flex items-center justify-center">
+<main class:list={[className, "my-auto flex items-center justify-center"]}>
 	<SectionContainer
 		as="form"
 		id={id}

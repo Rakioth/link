@@ -5,7 +5,13 @@ import Form from "@/sections/Form.astro"
 ---
 
 <Layout title="MANAGE">
-	<Form title="Manage Short URLs" button="Unshorten!" id="manage" success="Deleted shorten URL!">
+	<Form
+		title="Manage Short URLs"
+		button="Unshorten!"
+		id="manage"
+		success="Deleted shorten URL!"
+		class="pb-[4.875rem] sm:pb-0"
+	>
 		<Input
 			as="select"
 			id="slug"
