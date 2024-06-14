@@ -23,9 +23,11 @@ const { title, button, id, success, error, class: className } = Astro.props
 		<h1 class="text-2xl font-black leading-none tracking-tight text-zinc-900">
 			{title}
 		</h1>
+
 		<div class="grid grid-cols-2 gap-2">
 			<slot />
 		</div>
+
 		<SubmitButton label={button} success={success} error={error} />
 	</SectionContainer>
 </main>

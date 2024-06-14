@@ -63,7 +63,10 @@ import Form from "@/sections/Form.astro"
 						throw new Error("Failed to create slug")
 					}
 				})
-				.then(() => (button.dataset.state = "true"))
+				.then(() => {
+					button.dataset.state = "true"
+					navigator.clipboard.writeText(`${location.origin}/${slug}`)
+				})
 				.catch(() => (button.dataset.state = "false"))
 				.finally(() => (button.disabled = false))
 		}
