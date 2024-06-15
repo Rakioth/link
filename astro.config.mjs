@@ -12,11 +12,6 @@ export default defineConfig({
 	}),
 	integrations: [tailwind()],
 	compressHTML: true,
-	vite: {
-		build: {
-			cssMinify: "lightningcss",
-		},
-	},
 	build: {
 		inlineStylesheets: "always",
 	},
