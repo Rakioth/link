@@ -14,7 +14,13 @@
   "files.associations": {
     "*.svg": "html"
   },
-  "eslint.validate": ["javascript", "javascriptreact", "astro", "typescript", "typescriptreact"],
+  "eslint.validate": [
+    "javascript",
+    "javascriptreact",
+    "astro",
+    "typescript",
+    "typescriptreact"
+  ],
   "javascript.format.insertSpaceBeforeFunctionParenthesis": false,
   "typescript.format.insertSpaceBeforeFunctionParenthesis": false,
   "javascript.format.insertSpaceAfterFunctionKeywordForAnonymousFunctions": false,
@@ -28,7 +34,12 @@
     }
   },
   "prettier.documentSelectors": ["**/*.astro"],
-  "tailwindCSS.classAttributes": ["class", "className", "ngClass", "class:list"],
+  "tailwindCSS.classAttributes": [
+    "class",
+    "className",
+    "ngClass",
+    "class:list"
+  ],
   "[javascript]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   }

@@ -1,15 +1,17 @@
 <div
-	transition:persist
-	id="velustro-background"
-	class="pointer-events-none fixed left-0 top-0 -z-10 h-screen w-full"
+  transition:persist
+  id="velustro-background"
+  class="pointer-events-none fixed left-0 top-0 -z-10 h-screen w-full"
 >
 </div>
 
 <script>
-	import { Color, Mesh, Program, Renderer, Triangle } from "ogl"
+  import { Color, Mesh, Program, Renderer, Triangle } from "ogl"
 
-	const container = document.getElementById("velustro-background") as HTMLDivElement
-	const vertex = `
+  const container = document.getElementById(
+    "velustro-background"
+  ) as HTMLDivElement
+  const vertex = `
 	attribute vec2 uv;
 	attribute vec2 position;
 
@@ -20,7 +22,7 @@
 		gl_Position = vec4( position, 0, 1 );
 	}
 	`
-	const fragment = `
+  const fragment = `
 	precision highp float;
 
 	uniform float uTime;
@@ -249,88 +251,97 @@
 	}
 	`
 
-	// 📽️ Animation
+  // 📽️ Animation
 
-	const renderer = new Renderer()
-	const gl = renderer.gl
+  const renderer = new Renderer()
+  const gl = renderer.gl
 
-	const geometry = new Triangle(gl)
-	const program = new Program(gl, {
-		vertex,
-		fragment,
-		uniforms: {
-			uTime: { value: 0 },
-			uColor: { value: new Color(0.3, 0.2, 0.5) },
-			uResolution: {
-				value: new Color(gl.canvas.width, gl.canvas.height, gl.canvas.width / gl.canvas.height),
-			},
-		},
-	})
-	const mesh = new Mesh(gl, { geometry, program })
+  const geometry = new Triangle(gl)
+  const program = new Program(gl, {
+    vertex,
+    fragment,
+    uniforms: {
+      uTime: { value: 0 },
+      uColor: { value: new Color(0.3, 0.2, 0.5) },
+      uResolution: {
+        value: new Color(
+          gl.canvas.width,
+          gl.canvas.height,
+          gl.canvas.width / gl.canvas.height
+        ),
+      },
+    },
+  })
+  const mesh = new Mesh(gl, { geometry, program })
 
-	gl.clearColor(1, 1, 1, 1)
-	container.appendChild(gl.canvas)
+  gl.clearColor(1, 1, 1, 1)
+  container.appendChild(gl.canvas)
 
-	// 🧱 Rendering
+  // 🧱 Rendering
 
-	const reducedMotionPreference = window.matchMedia("(prefers-reduced-motion: no-preference)")
-	let animationId: number
-	let isRendering = false
+  const reducedMotionPreference = window.matchMedia(
+    "(prefers-reduced-motion: no-preference)"
+  )
+  let animationId: number
+  let isRendering = false
 
-	function tick(timestamp: number) {
-		animationId = requestAnimationFrame(tick)
-		program.uniforms.uTime.value = timestamp * 0.001
-		renderer.render({ scene: mesh })
-	}
+  function tick(timestamp: number) {
+    animationId = requestAnimationFrame(tick)
+    program.uniforms.uTime.value = timestamp * 0.001
+    renderer.render({ scene: mesh })
+  }
 
-	function startRendering() {
-		if (!isRendering) animationId = requestAnimationFrame(tick)
-		isRendering = true
-	}
+  function startRendering() {
+    if (!isRendering) animationId = requestAnimationFrame(tick)
+    isRendering = true
+  }
 
-	function stopRendering() {
-		if (isRendering) cancelAnimationFrame(animationId)
-		isRendering = false
-	}
+  function stopRendering() {
+    if (isRendering) cancelAnimationFrame(animationId)
+    isRendering = false
+  }
 
-	function initRendering() {
-		if (!isRendering) {
-			tick(300)
-			isRendering = true
-		}
-		if (!reducedMotionPreference.matches) stopRendering()
-	}
+  function initRendering() {
+    if (!isRendering) {
+      tick(300)
+      isRendering = true
+    }
+    if (!reducedMotionPreference.matches) stopRendering()
+  }
 
-	// 👂 Listeners
+  // 👂 Listeners
 
-	function handleResize(handler: () => void, timeout: number) {
-		let timer: number
+  function handleResize(handler: () => void, timeout: number) {
+    let timer: number
 
-		return function () {
-			clearTimeout(timer)
-			timer = window.setTimeout(handler, timeout)
-		}
-	}
+    return function () {
+      clearTimeout(timer)
+      timer = window.setTimeout(handler, timeout)
+    }
+  }
 
-	function handleVisibilityChange() {
-		if (document.hidden || !reducedMotionPreference.matches) stopRendering()
-		else startRendering()
-	}
+  function handleVisibilityChange() {
+    if (document.hidden || !reducedMotionPreference.matches) stopRendering()
+    else startRendering()
+  }
 
-	function handleReducedMotionPreferenceChange(event: MediaQueryListEvent) {
-		if (event.matches) startRendering()
-		else stopRendering()
-	}
+  function handleReducedMotionPreferenceChange(event: MediaQueryListEvent) {
+    if (event.matches) startRendering()
+    else stopRendering()
+  }
 
-	function setCanvasSize() {
-		renderer.setSize(container.offsetWidth, container.offsetHeight)
-		initRendering()
-	}
+  function setCanvasSize() {
+    renderer.setSize(container.offsetWidth, container.offsetHeight)
+    initRendering()
+  }
 
-	// 🚀 Setup
+  // 🚀 Setup
 
-	setCanvasSize()
-	window.addEventListener("resize", handleResize(setCanvasSize, 300))
-	document.addEventListener("visibilitychange", handleVisibilityChange)
-	reducedMotionPreference.addEventListener("change", handleReducedMotionPreferenceChange)
+  setCanvasSize()
+  window.addEventListener("resize", handleResize(setCanvasSize, 300))
+  document.addEventListener("visibilitychange", handleVisibilityChange)
+  reducedMotionPreference.addEventListener(
+    "change",
+    handleReducedMotionPreferenceChange
+  )
 </script>

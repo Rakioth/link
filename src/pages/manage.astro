@@ -5,90 +5,94 @@ import Form from "@/sections/Form.astro"
 ---
 
 <Layout title="MANAGE">
-	<Form
-		title="Manage Short URLs"
-		button="Unshorten!"
-		id="manage"
-		success="Deleted shorten URL!"
-		class="pb-[4.875rem] sm:pb-0"
-	>
-		<Input
-			as="select"
-			id="slug"
-			label="Signature Slug"
-			placeholder="Select your option"
-			class="col-span-2"
-		/>
-		<Input
-			id="auth"
-			label="Auth Code"
-			placeholder="Enter your authorization code"
-			type="password"
-			class="col-span-2"
-		/>
-	</Form>
+  <Form
+    title="Manage Short URLs"
+    button="Unshorten!"
+    id="manage"
+    success="Deleted shorten URL!"
+    class="pb-[4.875rem] sm:pb-0"
+  >
+    <Input
+      as="select"
+      id="slug"
+      label="Signature Slug"
+      placeholder="Select your option"
+      class="col-span-2"
+    />
+    <Input
+      id="auth"
+      label="Auth Code"
+      placeholder="Enter your authorization code"
+      type="password"
+      class="col-span-2"
+    />
+  </Form>
 </Layout>
 
 <script>
-	document.addEventListener("astro:page-load", () => {
-		const form: HTMLFormElement | null = document.querySelector("form#manage")
-		const button = document.querySelector("form button") as HTMLButtonElement
-		const select: HTMLSelectElement | null = document.querySelector("select")
-		const placeholder = document.querySelector("select option[disabled]") as HTMLOptionElement
+  document.addEventListener("astro:page-load", () => {
+    const form: HTMLFormElement | null = document.querySelector("form#manage")
+    const button = document.querySelector("form button") as HTMLButtonElement
+    const select: HTMLSelectElement | null = document.querySelector("select")
+    const placeholder = document.querySelector(
+      "select option[disabled]"
+    ) as HTMLOptionElement
 
-		async function handleSlugs() {
-			const slugs: string[] = await fetch("/api")
-				.then((res) => {
-					if (res.status !== 200) {
-						throw new Error("Failed to fetch slugs")
-					}
-					return res.json()
-				})
-				.catch(() => [])
+    async function handleSlugs() {
+      const slugs: string[] = await fetch("/api")
+        .then((res) => {
+          if (res.status !== 200) {
+            throw new Error("Failed to fetch slugs")
+          }
+          return res.json()
+        })
+        .catch(() => [])
 
-			slugs.forEach((slug) => {
-				const option = document.createElement("option")
-				option.value = slug
-				option.textContent = slug
-				select?.appendChild(option)
-			})
-		}
+      slugs.forEach((slug) => {
+        const option = document.createElement("option")
+        option.value = slug
+        option.textContent = slug
+        select?.appendChild(option)
+      })
+    }
 
-		function handleSubmit(event: SubmitEvent) {
-			event.preventDefault()
-			button.disabled = true
+    function handleSubmit(event: SubmitEvent) {
+      event.preventDefault()
+      button.disabled = true
 
-			const slug = form?.slug.value
-			const auth = form?.auth.value
+      const slug = form?.slug.value
+      const auth = form?.auth.value
 
-			fetch(`/api/${slug}`, {
-				method: "DELETE",
-				headers: {
-					Authorization: auth,
-				},
-			})
-				.then((res) => {
-					if (res.status !== 204) {
-						throw new Error("Failed to delete slug")
-					}
-					const option = select?.querySelector(`option[value="${slug}"]`) as HTMLOptionElement
-					option.remove()
-					placeholder.selected = true
-					button.dataset.state = "true"
-				})
-				.catch(() => (button.dataset.state = "false"))
-				.finally(() => (button.disabled = false))
-		}
+      fetch(`/api/${slug}`, {
+        method: "DELETE",
+        headers: {
+          Authorization: auth,
+        },
+      })
+        .then((res) => {
+          if (res.status !== 204) {
+            throw new Error("Failed to delete slug")
+          }
+          const option = select?.querySelector(
+            `option[value="${slug}"]`
+          ) as HTMLOptionElement
+          option.remove()
+          placeholder.selected = true
+          button.dataset.state = "true"
+        })
+        .catch(() => (button.dataset.state = "false"))
+        .finally(() => (button.disabled = false))
+    }
 
-		document.addEventListener(
-			"astro:before-swap",
-			() => {
-				form?.removeEventListener("submit", handleSubmit)
-			},
-			{ once: true }
-		)
+    document.addEventListener(
+      "astro:before-swap",
+      () => {
+        form?.removeEventListener("submit", handleSubmit)
+      },
+      { once: true }
+    )
 
-		handleSlugs()
-		form?.addEventListener("submit", handleSubmit)
-	})
+    handleSlugs()
+    form?.addEventListener("submit", handleSubmit)
+  })
 </script>

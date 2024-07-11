@@ -8,12 +8,12 @@ import Header from "@/sections/Header.astro"
 import "@fontsource-variable/onest"
 
 interface Props {
-	lang?: string
-	title?: string
-	description?: string
-	image?: string
-	href?: string
-	label?: string
+  lang?: string
+  title?: string
+  description?: string
+  image?: string
+  href?: string
+  label?: string
 }
 
 const { lang = "en", title, description, image, href, label } = Astro.props
@@ -21,29 +21,29 @@ const { lang = "en", title, description, image, href, label } = Astro.props
 
 <!doctype html>
 <html lang={lang} class="h-full">
-	<head>
-		<SEO title={title} description={description} image={image} />
-		<ViewTransitions />
-	</head>
+  <head>
+    <SEO title={title} description={description} image={image} />
+    <ViewTransitions />
+  </head>
 
-	<body
-		class="flex min-h-full flex-col gap-y-12 bg-gradient-to-br from-[#8b49ff] via-[#ce1bff] to-[#0605ff] p-6 md:gap-y-20 md:p-12"
-	>
-		<VelustroBackground />
-		<Header href={href} label={label} />
-		<slot />
-		<Footer />
-		<style is:global>
-			html {
-				color-scheme: light dark;
-				font-family: "Onest Variable", system-ui, sans-serif;
-			}
+  <body
+    class="flex min-h-full flex-col gap-y-12 bg-gradient-to-br from-[#8b49ff] via-[#ce1bff] to-[#0605ff] p-6 md:gap-y-20 md:p-12"
+  >
+    <VelustroBackground />
+    <Header href={href} label={label} />
+    <slot />
+    <Footer />
+    <style is:global>
+      html {
+        color-scheme: light dark;
+        font-family: "Onest Variable", system-ui, sans-serif;
+      }
 
-			@supports selector(::selection) {
-				::selection {
-					@apply bg-zinc-900 text-white;
-				}
-			}
-		</style>
-	</body>
+      @supports selector(::selection) {
+        ::selection {
+          @apply bg-zinc-900 text-white;
+        }
+      }
+    </style>
+  </body>
 </html>

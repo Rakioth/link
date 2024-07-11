@@ -4,27 +4,27 @@ import UnderlineLink from "@/components/UnderlineLink.astro"
 import Logo from "@/icons/Logo.astro"
 
 interface Props {
-	href?: string
-	label?: string
+  href?: string
+  label?: string
 }
 
 const { href = "/", label = "Create." } = Astro.props
 ---
 
 <SectionContainer
-	as="header"
-	class="flex items-center justify-between text-sm text-zinc-900 md:text-base"
+  as="header"
+  class="flex items-center justify-between text-sm text-zinc-900 md:text-base"
 >
-	<a
-		href="/"
-		aria-label="Logo Raks"
-		class="rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white"
-		data-astro-reload
-	>
-		<Logo />
-	</a>
+  <a
+    href="/"
+    aria-label="Logo Raks"
+    class="rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white"
+    data-astro-reload
+  >
+    <Logo />
+  </a>
 
-	<UnderlineLink href={href} isExternal={false} class="font-bold uppercase">
-		{label}
-	</UnderlineLink>
+  <UnderlineLink href={href} isExternal={false} class="font-bold uppercase">
+    {label}
+  </UnderlineLink>
 </SectionContainer>

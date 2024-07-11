@@ -2,14 +2,17 @@
 import type { HTMLTag } from "astro/types"
 
 interface Props {
-	as?: HTMLTag
-	id?: string
-	class?: string
+  as?: HTMLTag
+  id?: string
+  class?: string
 }
 
 const { as: Tag = "section", id, class: className } = Astro.props
 ---
 
-<Tag id={id} class:list={[className, "container mx-auto w-full md:max-w-xl lg:max-w-2xl"]}>
-	<slot />
+<Tag
+  id={id}
+  class:list={[className, "container mx-auto w-full md:max-w-xl lg:max-w-2xl"]}
+>
+  <slot />
 </Tag>
