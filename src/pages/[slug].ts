@@ -2,7 +2,7 @@ import type { APIRoute } from "astro"
 
 export const prerender = false
 
-export const GET: APIRoute = async ({ locals, params, redirect }) => {
+export const GET: APIRoute = async ({ locals, params, redirect, url }) => {
   const { slug } = params
 
   if (!slug) {
@@ -15,7 +15,12 @@ export const GET: APIRoute = async ({ locals, params, redirect }) => {
     const redirection = await REDIRECTIONS.get(slug)
 
     if (!redirection) {
-      return redirect("/404")
+      const error = await fetch(`${url}/404`)
+      return new Response(error.body, {
+        headers: error.headers,
+        status: 404,
+        statusText: "Not Found",
+      })
     }
     return redirect(redirection, 302)
   } catch {

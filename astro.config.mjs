@@ -4,6 +4,7 @@ import { defineConfig } from "astro/config"
 
 export default defineConfig({
   site: "https://link.raks.dev",
+  trailingSlash: "never",
   output: "hybrid",
   adapter: cloudflare({
     platformProxy: {
